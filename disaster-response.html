@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>재해대응법 · 더현대광주 신축공사</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+
+  :root{
+    --bg:#FFF7F1; --ink:#201712; --ink-soft:#5B4C43; --line:#EADACC;
+    --red:#C21F2A; --red-deep:#8F1620;
+    --amber:#E8940F; --amber-deep:#B4700A;
+    --wine:#7A1E3D; --wine-deep:#54142B;
+    --orange:#D2601A; --orange-deep:#A34712;
+    --blue:#2178C4; --blue-deep:#175A94;
+    --navy:#2B3A55; --navy-deep:#1D2740;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:520px; margin:0 auto; padding:0 20px 50px; }
+
+  .site-tag{
+    display:flex; align-items:center; gap:8px;
+    padding:18px 0 4px; font-size:13px; color:var(--ink-soft); font-weight:600;
+  }
+  .site-tag .dot{ width:7px; height:7px; border-radius:50%; background:var(--red); animation: pulse 1.6s infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+  @media (prefers-reduced-motion: reduce){ .site-tag .dot{ animation:none; } }
+
+  .back-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    margin-top:16px; padding:8px 14px; border-radius:99px;
+    background:#F3ECE4; color:var(--ink); font-size:13px; font-weight:700; text-decoration:none;
+  }
+
+  h1.page-title{ font-size:22px; font-weight:800; margin:18px 0 4px; }
+  .page-sub{ font-size:13.5px; color:var(--ink-soft); margin:0 0 22px; }
+
+  .menu{ display:flex; flex-direction:column; gap:12px; }
+
+  .tile{
+    position:relative; display:block; border-radius:16px; padding:20px;
+    text-decoration:none; color:#fff; border:none; width:100%; text-align:left;
+    font-family:inherit; cursor:pointer;
+  }
+  .tile:active{ transform: scale(0.99); }
+  .tile .row{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .tile .txt{ flex:1; }
+  .tile .title{ font-size:16.5px; font-weight:800; }
+  .tile .sub{ font-size:12px; margin-top:4px; opacity:.9; }
+  .tile .arrow{ font-size:20px; opacity:.9; }
+
+  .tile.red{ background: linear-gradient(135deg, var(--red), var(--red-deep)); }
+  .tile.amber{ background: linear-gradient(135deg, var(--amber), var(--amber-deep)); }
+  .tile.wine{ background: linear-gradient(135deg, var(--wine), var(--wine-deep)); }
+  .tile.orange{ background: linear-gradient(135deg, var(--orange), var(--orange-deep)); }
+  .tile.blue{ background: linear-gradient(135deg, var(--blue), var(--blue-deep)); }
+  .tile.navy{ background: linear-gradient(135deg, var(--navy), var(--navy-deep)); }
+
+  .choices{ max-height:0; overflow:hidden; transition: max-height .22s ease; }
+  .tile.open .choices{ max-height:120px; margin-top:14px; }
+  .choices .opt-row{ display:flex; gap:8px; }
+  .choices a{
+    flex:1; display:flex; align-items:center; justify-content:center;
+    background: rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.35);
+    border-radius:10px; padding:11px 8px; color:#fff; text-decoration:none;
+    font-size:13px; font-weight:700; text-align:center;
+  }
+  .choices a:active{ background: rgba(255,255,255,.28); }
+
+  footer{
+    margin-top:36px; padding-top:16px; border-top:1px solid var(--line);
+    font-size:12px; color:var(--ink-soft); text-align:center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="site-tag"><span class="dot"></span>더현대광주 신축공사 현장</div>
+  <a class="back-btn" href="index.html">← 메인으로</a>
+
+  <h1 class="page-title">재해대응법</h1>
+  <p class="page-sub">항목을 누르면 응급처치법 영상과 연결 전화가 나와요.</p>
+
+  <div class="menu">
+
+    <button type="button" class="tile amber" onclick="this.classList.toggle('open')">
+      <div class="row">
+        <div class="txt">
+          <div class="title">🌡️ 온열질환</div>
+          <div class="sub">中暑 · Say nhiệt</div>
+        </div>
+        <div class="arrow">＋</div>
+      </div>
+      <div class="choices">
+        <div class="opt-row">
+          <a href="https://youtu.be/7cm1Z-_1vps" target="_blank" rel="noopener">응급처치법 보기</a>
+          <a href="tel:01049095514">보건관리자 전화</a>
+        </div>
+      </div>
+    </button>
+
+    <button type="button" class="tile wine" onclick="this.classList.toggle('open')">
+      <div class="row">
+        <div class="txt">
+          <div class="title">❤️ 심정지</div>
+          <div class="sub">心脏骤停 · Ngừng tim</div>
+        </div>
+        <div class="arrow">＋</div>
+      </div>
+      <div class="choices">
+        <div class="opt-row">
+          <a href="https://youtu.be/2ZIdOeTZRMk" target="_blank" rel="noopener">응급처치법 보기</a>
+          <a href="tel:119">119 신고</a>
+        </div>
+      </div>
+    </button>
+
+    <button type="button" class="tile red" onclick="this.classList.toggle('open')">
+      <div class="row">
+        <div class="txt">
+          <div class="title">🔪 절단</div>
+          <div class="sub">切割伤 · Vết đứt/cắt</div>
+        </div>
+        <div class="arrow">＋</div>
+      </div>
+      <div class="choices">
+        <div class="opt-row">
+          <a href="https://youtu.be/Sm7548rWXPE" target="_blank" rel="noopener">응급처치법 보기</a>
+          <a href="tel:0622206114">전남대병원 전화</a>
+        </div>
+      </div>
+    </button>
+
+    <button type="button" class="tile orange" onclick="this.classList.toggle('open')">
+      <div class="row">
+        <div class="txt">
+          <div class="title">🔥 화상</div>
+          <div class="sub">烧伤 · Bỏng</div>
+        </div>
+        <div class="arrow">＋</div>
+      </div>
+      <div class="choices">
+        <div class="opt-row">
+          <a href="https://m.youtube.com/watch?v=tBILVcLc1kQ" target="_blank" rel="noopener">응급처치법 보기</a>
+          <a href="tel:0622206114">전남대병원 전화</a>
+        </div>
+      </div>
+    </button>
+
+    <button type="button" class="tile blue" onclick="this.classList.toggle('open')">
+      <div class="row">
+        <div class="txt">
+          <div class="title">👁️ 안구손상</div>
+          <div class="sub">眼部损伤 · Tổn thương mắt</div>
+        </div>
+        <div class="arrow">＋</div>
+      </div>
+      <div class="choices">
+        <div class="opt-row">
+          <a href="https://m.youtube.com/shorts/k3TIYSL-p-o" target="_blank" rel="noopener">응급처치법 보기</a>
+          <a href="tel:0622206114">전남대병원 전화</a>
+        </div>
+      </div>
+    </button>
+
+    <button type="button" class="tile navy" onclick="this.classList.toggle('open')">
+      <div class="row">
+        <div class="txt">
+          <div class="title">🦴 골절</div>
+          <div class="sub">骨折 · Gãy xương</div>
+        </div>
+        <div class="arrow">＋</div>
+      </div>
+      <div class="choices">
+        <div class="opt-row">
+          <a href="https://m.youtube.com/watch?v=ZWkVO1wed3c" target="_blank" rel="noopener">응급처치법 보기</a>
+          <a href="tel:0622206114">전남대병원 전화</a>
+        </div>
+      </div>
+    </button>
+
+  </div>
+
+  <footer>응급처치법 보기는 유튜브 새 창으로 열리고, 전화는 바로 연결됩니다.</footer>
+
+</div>
+</body>
+</html>

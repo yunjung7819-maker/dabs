@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>편의시설 위치 · 더현대광주 신축공사</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+  :root{
+    --bg:#FBF6F1; --ink:#201712; --ink-soft:#5B4C43; --line:#EADACC;
+    --blue:#2178C4; --blue-deep:#175A94;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:720px; margin:0 auto; padding:0 16px 50px; }
+
+  .badge{
+    display:inline-block; margin-top:20px;
+    padding:6px 14px; border-radius:99px;
+    background:var(--blue); color:#fff; font-size:13px; font-weight:700;
+  }
+  .title-row{ display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; margin:14px 0 20px; }
+  h1{ font-size:21px; margin:0; }
+  .hint{ font-size:12px; color:var(--ink-soft); margin:0; }
+
+  .map-wrap{ position:relative; }
+  .map-wrap img{
+    width:100%; height:auto;
+    border-radius:12px;
+    border:1px solid var(--line);
+    display:block;
+  }
+  .hotspot{
+    position:absolute;
+    background:transparent;
+    border:none;
+    cursor:pointer;
+    padding:0;
+  }
+  .hotspot:active{ background: rgba(255,255,255,.15); border-radius:8px; }
+
+  .modal-overlay{
+    display:none;
+    position:fixed; inset:0;
+    background: rgba(20,12,8,.75);
+    z-index:50;
+    align-items:center; justify-content:center;
+    padding:24px;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal-overlay .modal-box{
+    max-width:420px; width:100%;
+    max-height:90vh;
+    overflow-y:auto;
+  }
+  .modal-overlay img.modal-photo{
+    width:100%; height:auto;
+    border-radius:8px;
+    border:5px solid #000;
+    display:block;
+  }
+  .modal-overlay .photo-block{ margin-bottom:16px; }
+  .modal-overlay .modal-cap{
+    color:#fff; text-align:center;
+    font-size:13.5px; font-weight:700;
+    margin-top:10px;
+  }
+  .modal-overlay .modal-close{
+    display:block; margin:14px auto 0;
+    background:#fff; color:var(--ink);
+    border:none; border-radius:99px;
+    padding:9px 20px;
+    font-size:13px; font-weight:700;
+    font-family:inherit;
+  }
+
+  a.back{
+    display:inline-block; margin-top:10px;
+    color:var(--blue); font-weight:700; text-decoration:none; font-size:14px;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="badge">편의시설 위치</div>
+    <div class="title-row">
+      <h1>현장 편의시설 배치도</h1>
+      <p class="hint">라벨을 클릭하시면 사진을 볼 수 있습니다</p>
+    </div>
+
+    <div class="map-wrap">
+      <img src="facilities-map.png" alt="편의시설 위치 배치도">
+      <button type="button" class="hotspot" style="left:39.9%; top:39.0%; width:21.3%; height:8.4%;" onclick="document.getElementById('breakModal1').classList.add('open')" aria-label="근로자휴게실1 사진 보기"></button>
+      <button type="button" class="hotspot" style="left:30.6%; top:26.5%; width:17.6%; height:8.4%;" onclick="document.getElementById('iceModal').classList.add('open')" aria-label="제빙기실 사진 보기"></button>
+      <button type="button" class="hotspot" style="left:43.6%; top:51.6%; width:21.3%; height:8.4%;" onclick="document.getElementById('breakModal2').classList.add('open')" aria-label="근로자휴게실2 사진 보기"></button>
+      <button type="button" class="hotspot" style="left:51.0%; top:73.9%; width:21.3%; height:8.4%;" onclick="document.getElementById('breakModal3').classList.add('open')" aria-label="근로자휴게실3 사진 보기"></button>
+      <button type="button" class="hotspot" style="left:51.0%; top:64.2%; width:21.3%; height:8.4%;" onclick="document.getElementById('breakModal4').classList.add('open')" aria-label="근로자휴게실4 사진 보기"></button>
+      <button type="button" class="hotspot" style="left:43.6%; top:32.1%; width:21.3%; height:8.4%;" onclick="document.getElementById('breakModal5').classList.add('open')" aria-label="근로자휴게실5 사진 보기"></button>
+      <button type="button" class="hotspot" style="left:0.9%; top:20.9%; width:19.5%; height:11.2%;" onclick="document.getElementById('rentalModal').classList.add('open')" aria-label="말비계 사다리 대여소 사진 보기"></button>
+      <button type="button" class="hotspot" style="left:88.1%; top:30.7%; width:11.9%; height:7.0%;" onclick="document.getElementById('eduModal').classList.add('open')" aria-label="안전교육장 사진 보기"></button>
+    </div>
+
+    <div class="modal-overlay" id="eduModal" onclick="if(event.target===this) this.classList.remove('open')">
+      <div class="modal-box">
+        <div class="photo-block">
+          <img class="modal-photo" src="facility-edu-a.jpg" alt="안전교육장 입구">
+          <div class="modal-cap">안전교육장 · 입구</div>
+        </div>
+        <div class="photo-block">
+          <img class="modal-photo" src="facility-edu-b.jpg" alt="안전교육장 내부1">
+          <div class="modal-cap">안전교육장 · 내부</div>
+        </div>
+        <div class="photo-block">
+          <img class="modal-photo" src="facility-edu-c.jpg" alt="안전교육장 내부2">
+          <div class="modal-cap">안전교육장 · 대강의실</div>
+        </div>
+        <button type="button" class="modal-close" onclick="document.getElementById('eduModal').classList.remove('open')">닫기</button>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="rentalModal" onclick="if(event.target===this) this.classList.remove('open')">
+      <div class="modal-box">
+        <div class="photo-block">
+          <img class="modal-photo" src="facility-rental-a.jpg" alt="말비계 사다리 대여소">
+          <div class="modal-cap">말비계·사다리 대여소</div>
+        </div>
+        <button type="button" class="modal-close" onclick="document.getElementById('rentalModal').classList.remove('open')">닫기</button>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="breakModal5" onclick="if(event.target===this) this.classList.remove('open')">
+      <div class="modal-box">
+        <div class="photo-block">
+          <img class="modal-photo" src="facility-break5-a.jpg" alt="근로자휴게실5 외관">
+          <div class="modal-cap">근로자휴게실5 · 외관</div>
+        </div>
+        <button type="button" class="modal-close" onclick="document.getElementById('breakModal5').classList.remove('open')">닫기</button>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="breakModal4" onclick="if(event.target===this) this.classList.remove('open')">
+      <div class="modal-box">
+        <div class="photo-block">
+          <img class="modal-photo" src="facility-break4-a.jpg" alt="근로자휴게실4 외관">
+          <div class="modal-cap">근로자휴게실4 · 외관</div>
+        </div>
+        <div class="photo-block">
+          <img class="modal-photo" src="facility-break4-b.jpg" alt="근로자휴게실4 내부">
+          <div class="modal-cap">근로자휴게실4 · 내부</div>
+        </div>
+        <button type="button" class="modal-close" onclick="document.getElementById('breakModal4').classList.remove('open')">닫기</button>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="breakModal3" onclick="if(event.target===this) this.classList.remove('open')">
+      <div class="modal-box">
+        <div class="photo-block">
+          <img class="modal-photo" src="facility-break3-a.jpg" alt="근로자휴게실3 외관">
+          <div class="modal-cap">근로자휴게실3 · 외관</div>
+        </div>
+        <div class="photo-block">
+          <img class="modal-photo" src="facility-break3-b.jpg" alt="근로자휴게실3 내부">
+          <div class="modal-cap">근로자휴게실3 · 내부</div>
+        </div>
+        <button type="button" class="modal-close" onclick="document.getElementById('breakModal3').classList.remove('open')">닫기</button>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="breakModal2" onclick="if(event.target===this) this.classList.remove('open')">
+      <div class="modal-box">
+        <div class="photo-block">
+          <img class="modal-photo" src="facility-break2-a.jpg" alt="근로자휴게실2 외관">
+          <div class="modal-cap">근로자휴게실2 · 외관</div>
+        </div>
+        <div class="photo-block">
+          <img class="modal-photo" src="facility-break2-b.jpg" alt="근로자휴게실2 내부">
+          <div class="modal-cap">근로자휴게실2 · 내부</div>
+        </div>
+        <button type="button" class="modal-close" onclick="document.getElementById('breakModal2').classList.remove('open')">닫기</button>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="iceModal" onclick="if(event.target===this) this.classList.remove('open')">
+      <div class="modal-box">
+        <div class="photo-block">
+          <img class="modal-photo" src="facility-ice-a.jpg" alt="제빙기 보관실 외관">
+          <div class="modal-cap">제빙기실 · 외관</div>
+        </div>
+        <div class="photo-block">
+          <img class="modal-photo" src="facility-ice-b.jpg" alt="제빙기 보관실 내부">
+          <div class="modal-cap">제빙기실 · 내부</div>
+        </div>
+        <button type="button" class="modal-close" onclick="document.getElementById('iceModal').classList.remove('open')">닫기</button>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="breakModal1" onclick="if(event.target===this) this.classList.remove('open')">
+      <div class="modal-box">
+        <div class="photo-block">
+          <img class="modal-photo" src="facility-break1-b.jpg" alt="근로자휴게실1 외관">
+          <div class="modal-cap">근로자휴게실1 · 외관</div>
+        </div>
+        <div class="photo-block">
+          <img class="modal-photo" src="facility-break1-a.jpg" alt="근로자휴게실1 내부">
+          <div class="modal-cap">근로자휴게실1 · 내부</div>
+        </div>
+        <button type="button" class="modal-close" onclick="document.getElementById('breakModal1').classList.remove('open')">닫기</button>
+      </div>
+    </div>
+
+    <a class="back" href="index.html">← 메인으로</a>
+  </div>
+</body>
+</html>

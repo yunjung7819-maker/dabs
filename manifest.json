@@ -1,0 +1,11 @@
+{
+  "name": "더현대광주 신축공사 안전 안내",
+  "short_name": "더현대광주 안전",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#FFF7F1",
+  "theme_color": "#E8500F",
+  "icons": [
+    { "src": "icon.png", "sizes": "1254x1254", "type": "image/png" }
+  ]
+}

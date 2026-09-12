@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>비상조직도 · 더현대광주 신축공사</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+
+  :root{
+    --bg:#FFF7F1;
+    --ink:#201712;
+    --ink-soft:#5B4C43;
+    --line:#EADACC;
+    --card:#fff;
+
+    --cyan:#1B9AAA; --cyan-deep:#137886;
+    --yellow:#E8C400; --yellow-deep:#B99900;
+    --orange:#F2994A; --orange-deep:#C9721F;
+    --green:#3FA65A; --green-deep:#2C7D42;
+    --red:#C21F2A; --red-deep:#8F1620;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:520px; margin:0 auto; padding:0 16px 60px; }
+
+  .site-tag{
+    display:flex; align-items:center; gap:8px;
+    padding:18px 0 4px; font-size:13px; color:var(--ink-soft); font-weight:600;
+  }
+  .site-tag .dot{
+    width:7px; height:7px; border-radius:50%; background:var(--red);
+    animation: pulse 1.6s infinite;
+  }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+  .back-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    margin-top:16px;
+    padding:8px 14px;
+    border-radius:99px;
+    background:#F3ECE4;
+    color:var(--ink);
+    font-size:13px; font-weight:700;
+    text-decoration:none;
+  }
+  @media (prefers-reduced-motion: reduce){ .site-tag .dot{ animation:none; } }
+
+  h1.page-title{ font-size:22px; font-weight:800; margin:14px 0 2px; }
+  .page-title-i18n{ font-size:12px; color:var(--ink-soft); font-weight:600; margin-bottom:8px; }
+  .page-sub{ font-size:13.5px; color:var(--ink-soft); margin:0 0 18px; }
+
+  /* ── 총괄책임자 카드 ───────────── */
+  .chief-card{
+    background: linear-gradient(135deg, var(--cyan), var(--cyan-deep));
+    border-radius:16px;
+    padding:18px 20px;
+    color:#fff;
+    margin-bottom:22px;
+  }
+  .chief-card .role{ font-size:12.5px; font-weight:700; opacity:.9; margin-bottom:2px; }
+  .chief-card .role-i18n{ font-size:10.5px; opacity:.75; margin-bottom:8px; }
+  .chief-card .row{ display:flex; justify-content:space-between; align-items:center; }
+  .chief-card .name{ font-size:17px; font-weight:800; }
+  .chief-card .sub{ font-size:12.5px; opacity:.85; margin-top:2px; }
+  .chief-card .call{
+    background:rgba(255,255,255,.2);
+    border:1px solid rgba(255,255,255,.4);
+    border-radius:10px;
+    padding:9px 14px;
+    color:#fff; text-decoration:none;
+    font-size:13px; font-weight:700;
+    white-space:nowrap;
+  }
+
+  /* ── 팀 섹션 (accordion) ───────── */
+  details.team{
+    border-radius:16px;
+    overflow:hidden;
+    margin-bottom:12px;
+    background: var(--card);
+    border:1px solid var(--line);
+  }
+  details.team summary{
+    list-style:none;
+    cursor:pointer;
+    padding:16px 18px;
+    display:flex; justify-content:space-between; align-items:center;
+    color:#fff;
+  }
+  details.team summary::-webkit-details-marker{ display:none; }
+  .summary-title{ font-weight:800; font-size:15.5px; }
+  .summary-title-i18n{ font-size:11px; font-weight:600; opacity:.85; margin-top:2px; }
+  summary .chev{ font-size:13px; transition: transform .15s ease; opacity:.9; flex-shrink:0; margin-left:10px; }
+  details[open] summary .chev{ transform: rotate(180deg); }
+
+  .team.yellow summary{ background:var(--yellow); color:var(--ink); }
+  .team.orange summary{ background:var(--orange); }
+  .team.green summary{ background:var(--green); }
+  .team.red summary{ background:var(--red); }
+
+  .team-body{ padding:14px 16px 18px; }
+
+  .member-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+    gap:10px;
+  }
+  .member-row:last-of-type{ border-bottom:none; }
+  .member-row .who .pos{ font-size:11.5px; color:var(--ink-soft); }
+  .member-row .who .nm{ font-size:14.5px; font-weight:700; margin-top:1px; }
+  .member-row a.call-chip{
+    flex-shrink:0;
+    background:#F3ECE4;
+    border-radius:10px;
+    padding:8px 12px;
+    font-size:13px; font-weight:700;
+    color:var(--ink);
+    text-decoration:none;
+    white-space:nowrap;
+  }
+
+  .team-note{ margin-top:14px; }
+  .team-note h3{ font-size:12.5px; color:var(--ink-soft); margin:0 0 6px; font-weight:700; }
+  .team-note ul{ margin:0; padding-left:18px; font-size:12.5px; color:var(--ink-soft); line-height:1.7; }
+  .team-note .ext-call a{ color:var(--orange-deep); font-weight:700; text-decoration:none; }
+
+  .partner-row{
+    margin-top:14px;
+    background:#F7F1EA;
+    border-radius:10px;
+    padding:10px 12px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .partner-row .who .pos{ font-size:11px; color:var(--ink-soft); }
+  .partner-row .who .nm{ font-size:13.5px; font-weight:700; }
+  .partner-row a.call-chip{
+    background:#fff; border:1px solid var(--line);
+    border-radius:10px; padding:7px 11px;
+    font-size:12.5px; font-weight:700; color:var(--ink); text-decoration:none;
+  }
+
+  footer{
+    margin-top:30px; padding-top:16px; border-top:1px solid var(--line);
+    font-size:12px; color:var(--ink-soft); text-align:center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="site-tag"><span class="dot"></span>더현대광주 신축공사 현장</div>
+  <a class="back-btn" href="index.html">← 메인으로</a>
+  <h1 class="page-title">비상조직도</h1>
+  <div class="page-title-i18n">应急组织图 · Sơ đồ tổ chức khẩn cấp</div>
+  <p class="page-sub">이름을 눌러도, 번호를 눌러도 바로 전화가 걸려요.<br>点击姓名或号码即可直接通话 · Nhấn vào tên hoặc số để gọi điện ngay</p>
+
+  <div class="chief-card">
+    <div class="role">안전보건총괄책임자 · 현장소장</div>
+    <div class="role-i18n">安全保健总负责人 · 现场所长 · Người phụ trách an toàn sức khỏe / Giám đốc công trường</div>
+    <div class="row">
+      <div>
+        <div class="name">김선규</div>
+        <div class="sub">062-528-3207</div>
+      </div>
+      <a class="call" href="tel:0625283207">전화하기</a>
+    </div>
+  </div>
+
+  <!-- 상황반 -->
+  <details class="team yellow" open>
+    <summary><div><div class="summary-title">상황반 (사업지원팀)</div><div class="summary-title-i18n">情况组 (业务支援组) · Tổ tình huống (Đội hỗ trợ)</div></div><span class="chev">▾</span></summary>
+    <div class="team-body">
+      <div class="member-row"><div class="who"><div class="pos">사업지원2팀장</div><div class="nm">이정우</div></div><a class="call-chip" href="tel:01090460245">010-9046-0245</a></div>
+      <div class="member-row"><div class="who"><div class="pos">공무책임매니저</div><div class="nm">김보현</div></div><a class="call-chip" href="tel:01047193490">010-4719-3490</a></div>
+      <div class="member-row"><div class="who"><div class="pos">공무매니저</div><div class="nm">조병남</div></div><a class="call-chip" href="tel:01057631998">010-5763-1998</a></div>
+
+      <div class="team-note">
+        <h3>주요 역할 · 主要职责 · Nhiệm vụ chính</h3>
+        <ul>
+          <li>상황접수 및 전파</li>
+          <li>비상상황실 설치/운영</li>
+          <li>인원대피 및 대피인원 파악</li>
+        </ul>
+      </div>
+      <div class="team-note ext-call">
+        <h3>내/외부 연락 · 内/外部联系 · Liên lạc trong/ngoài</h3>
+        <ul>
+          <li>① 본사 (사업본부/안전지원실)</li>
+          <li>② 발주처 및 관할 관청</li>
+          <li>③ 병원 / 경찰서 / 소방서 (최초발견자 포함)</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <!-- 복구반 (사업수행팀) -->
+  <details class="team orange">
+    <summary><div><div class="summary-title">복구반 (사업수행팀)</div><div class="summary-title-i18n">恢复组 (业务执行组) · Tổ phục hồi (Đội thực hiện)</div></div><span class="chev">▾</span></summary>
+    <div class="team-body">
+      <div class="member-row"><div class="who"><div class="pos">사업수행팀장</div><div class="nm">김영재</div></div><a class="call-chip" href="tel:01053988910">010-5398-8910</a></div>
+      <div class="member-row"><div class="who"><div class="pos">사업수행책임</div><div class="nm">유장훈</div></div><a class="call-chip" href="tel:01088099094">010-8809-9094</a></div>
+      <div class="member-row"><div class="who"><div class="pos">사업수행책임</div><div class="nm">장현승</div></div><a class="call-chip" href="tel:01027078983">010-2707-8983</a></div>
+      <div class="member-row"><div class="who"><div class="pos">사업수행책임</div><div class="nm">전창희</div></div><a class="call-chip" href="tel:01027446118">010-2744-6118</a></div>
+      <div class="member-row"><div class="who"><div class="pos">사업수행매니저</div><div class="nm">전건우</div></div><a class="call-chip" href="tel:01071582689">010-7158-2689</a></div>
+      <div class="member-row"><div class="who"><div class="pos">사업수행매니저</div><div class="nm">임광섭</div></div><a class="call-chip" href="tel:01062736286">010-6273-6286</a></div>
+      <div class="member-row"><div class="who"><div class="pos">전기책임매니저</div><div class="nm">변형곤</div></div><a class="call-chip" href="tel:01073374627">010-7337-4627</a></div>
+      <div class="member-row"><div class="who"><div class="pos">전기책임매니저</div><div class="nm">이호진</div></div><a class="call-chip" href="tel:01050525986">010-5052-5986</a></div>
+      <div class="member-row"><div class="who"><div class="pos">전기매니저</div><div class="nm">임현우</div></div><a class="call-chip" href="tel:01089487757">010-8948-7757</a></div>
+      <div class="member-row"><div class="who"><div class="pos">설비책임매니저</div><div class="nm">안재홍</div></div><a class="call-chip" href="tel:01025476419">010-2547-6419</a></div>
+      <div class="member-row"><div class="who"><div class="pos">설비매니저</div><div class="nm">이도현</div></div><a class="call-chip" href="tel:01099200914">010-9920-0914</a></div>
+      <div class="member-row"><div class="who"><div class="pos">설비매니저</div><div class="nm">김수민</div></div><a class="call-chip" href="tel:01021005415">010-2100-5415</a></div>
+      <div class="member-row"><div class="who"><div class="pos">품질책임매니저</div><div class="nm">구기원</div></div><a class="call-chip" href="tel:01033991049">010-3399-1049</a></div>
+      <div class="member-row"><div class="who"><div class="pos">품질매니저</div><div class="nm">조성민</div></div><a class="call-chip" href="tel:01049328835">010-4932-8835</a></div>
+
+      <div class="team-note">
+        <h3>주요 역할 · 主要职责 · Nhiệm vụ chính</h3>
+        <ul>
+          <li>2차 재해예방 (동력차단 등)</li>
+          <li>화재시 화재진압</li>
+          <li>복구작업</li>
+          <li>사고원인 조사</li>
+          <li>재발방지 대책 수립</li>
+        </ul>
+      </div>
+      <div class="partner-row">
+        <div class="who"><div class="pos">협력사 · 合作公司 · Đối tác · 대주중공업</div><div class="nm">신우현</div></div>
+        <a class="call-chip" href="tel:01088461879">010-8846-1879</a>
+      </div>
+      <div class="partner-row">
+        <div class="who"><div class="pos">협력사 · 合作公司 · Đối tác · 약동산업</div><div class="nm">임태경</div></div>
+        <a class="call-chip" href="tel:01062496142">010-6249-6142</a>
+      </div>
+      <div class="partner-row">
+        <div class="who"><div class="pos">협력사 · 合作公司 · Đối tác · 영신디엔씨</div><div class="nm">김범찬</div></div>
+        <a class="call-chip" href="tel:01096527768">010-9652-7768</a>
+      </div>
+      <div class="partner-row">
+        <div class="who"><div class="pos">협력사 · 合作公司 · Đối tác · 신영토건</div><div class="nm">이경현</div></div>
+        <a class="call-chip" href="tel:01085942588">010-8594-2588</a>
+      </div>
+    </div>
+  </details>
+
+  <!-- 지원반 -->
+  <details class="team green">
+    <summary><div><div class="summary-title">지원반 (사업지원팀)</div><div class="summary-title-i18n">支援组 (业务支援组) · Tổ hỗ trợ (Đội hỗ trợ)</div></div><span class="chev">▾</span></summary>
+    <div class="team-body">
+      <div class="member-row"><div class="who"><div class="pos">사업지원1팀장</div><div class="nm">김태화</div></div><a class="call-chip" href="tel:01086069306">010-8606-9306</a></div>
+      <div class="member-row"><div class="who"><div class="pos">설계책임매니저</div><div class="nm">이동건</div></div><a class="call-chip" href="tel:01087677176">010-8767-7176</a></div>
+      <div class="member-row"><div class="who"><div class="pos">설계매니저</div><div class="nm">신익철</div></div><a class="call-chip" href="tel:01038850023">010-3885-0023</a></div>
+      <div class="member-row"><div class="who"><div class="pos">설계매니저</div><div class="nm">윤세희</div></div><a class="call-chip" href="tel:01094300916">010-9430-0916</a></div>
+      <div class="member-row"><div class="who"><div class="pos">관리매니저</div><div class="nm">조순옥</div></div><a class="call-chip" href="tel:01022654380">010-2265-4380</a></div>
+      <div class="member-row"><div class="who"><div class="pos">관리매니저</div><div class="nm">박재형</div></div><a class="call-chip" href="tel:01056233538">010-5623-3538</a></div>
+
+      <div class="team-note">
+        <h3>주요 역할 · 主要职责 · Nhiệm vụ chính</h3>
+        <ul>
+          <li>현장통제 (인원/차량)</li>
+          <li>언론기관 통제</li>
+          <li>복구지원 (인원/자재 등)</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <!-- 구조반 -->
+  <details class="team red">
+    <summary><div><div class="summary-title">구조반 (안전팀)</div><div class="summary-title-i18n">救助组 (安全组) · Tổ cứu hộ (Đội an toàn)</div></div><span class="chev">▾</span></summary>
+    <div class="team-body">
+      <div class="member-row"><div class="who"><div class="pos">안전팀장</div><div class="nm">임성락</div></div><a class="call-chip" href="tel:01042396271">010-4239-6271</a></div>
+      <div class="member-row"><div class="who"><div class="pos">안전책임매니저</div><div class="nm">황보영일</div></div><a class="call-chip" href="tel:01067919896">010-6791-9896</a></div>
+      <div class="member-row"><div class="who"><div class="pos">안전매니저</div><div class="nm">이임수</div></div><a class="call-chip" href="tel:01040769608">010-4076-9608</a></div>
+      <div class="member-row"><div class="who"><div class="pos">안전매니저</div><div class="nm">강민수</div></div><a class="call-chip" href="tel:01033633942">010-3363-3942</a></div>
+      <div class="member-row"><div class="who"><div class="pos">안전매니저</div><div class="nm">박휘</div></div><a class="call-chip" href="tel:01045568477">010-4556-8477</a></div>
+      <div class="member-row"><div class="who"><div class="pos">안전매니저</div><div class="nm">최영상</div></div><a class="call-chip" href="tel:01085267922">010-8526-7922</a></div>
+      <div class="member-row"><div class="who"><div class="pos">안전매니저</div><div class="nm">최동수</div></div><a class="call-chip" href="tel:01032470197">010-3247-0197</a></div>
+      <div class="member-row"><div class="who"><div class="pos">안전매니저</div><div class="nm">권준혁</div></div><a class="call-chip" href="tel:01057518494">010-5751-8494</a></div>
+      <div class="member-row"><div class="who"><div class="pos">보건매니저</div><div class="nm">우은희</div></div><a class="call-chip" href="tel:01049095514">010-4909-5514</a></div>
+
+      <div class="team-note">
+        <h3>주요 역할 · 主要职责 · Nhiệm vụ chính</h3>
+        <ul>
+          <li>인력구조/후송, 응급처치</li>
+          <li>사고원인 조사</li>
+          <li>재발방지 대책 수립</li>
+        </ul>
+      </div>
+      <div class="team-note ext-call">
+        <h3>내/외부 연락 · 内/外部联系 · Liên lạc trong/ngoài</h3>
+        <ul>
+          <li>① 고용노동부 광주지방고용노동청 <a href="tel:0629756340">062-975-6340</a></li>
+          <li>② 안전보건공단 광주광역본부 <a href="tel:0629498700">062-949-8700</a></li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <footer>2026.09.12 기준 비상조직도 · 이름 또는 번호를 누르면 바로 전화가 연결됩니다.<br>点击姓名或号码即可直接通话 · Nhấn vào tên hoặc số để gọi điện ngay</footer>
+
+</div>
+</body>
+</html>

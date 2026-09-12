@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>DABs 일일안전회의 · 더현대광주 신축공사</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+
+  :root{
+    --bg:#FFF7F1; --ink:#201712; --ink-soft:#5B4C43; --line:#EADACC;
+    --card:#fff;
+    --accent:#E8500F; --accent-deep:#B8380A;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:720px; margin:0 auto; padding:0 16px 60px; }
+
+  .back-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    margin-top:16px; padding:8px 14px; border-radius:99px;
+    background:#F3ECE4; color:var(--ink); font-size:13px; font-weight:700; text-decoration:none;
+  }
+
+  h1{ font-size:22px; font-weight:800; margin:16px 0 2px; }
+  .page-sub{ font-size:13px; color:var(--ink-soft); margin:0 0 18px; }
+
+  /* 날짜 바 */
+  .datebar{
+    display:flex; align-items:center; gap:8px;
+    background:var(--card); border:1px solid var(--line);
+    border-radius:14px; padding:10px 12px; margin-bottom:16px;
+  }
+  .datebar button{
+    background:#F3ECE4; border:none; border-radius:10px;
+    padding:8px 12px; font-size:14px; font-weight:700;
+    font-family:inherit; cursor:pointer; color:var(--ink);
+  }
+  .datebar input[type=date]{
+    flex:1; border:none; background:transparent;
+    font-family:inherit; font-size:15px; font-weight:700;
+    color:var(--ink); text-align:center;
+  }
+
+  .sync-note{
+    font-size:11.5px; padding:8px 12px; border-radius:10px;
+    margin-bottom:16px; line-height:1.5;
+  }
+  .sync-note.local{ background:#FFF0E6; border:1px solid #FFD9BD; color:var(--accent-deep); }
+  .sync-note.live{ background:#E8F6EE; border:1px solid #B8E3CA; color:#146640; }
+
+  h2{ font-size:15px; font-weight:800; margin:22px 0 8px; }
+  .hint{ font-size:12px; color:var(--ink-soft); margin:0 0 10px; line-height:1.6; }
+
+  /* 지도 */
+  .map-wrap{
+    position:relative; border-radius:12px; overflow:hidden;
+    border:1px solid var(--line); background:#000;
+    touch-action:none; user-select:none;
+  }
+  .map-wrap img{ width:100%; height:auto; display:block; }
+  .zone{
+    position:absolute; border:2.5px solid; border-radius:4px;
+    display:flex; align-items:flex-start; justify-content:flex-start;
+  }
+  .zone .zlabel{
+    font-size:10px; font-weight:800; color:#fff;
+    padding:2px 5px; border-radius:3px; margin:2px;
+    white-space:nowrap; max-width:calc(100% - 4px); overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .zone .zdel{
+    position:absolute; top:-9px; right:-9px;
+    width:20px; height:20px; border-radius:50%;
+    background:#111; color:#fff; border:2px solid #fff;
+    font-size:12px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    font-family:inherit; padding:0;
+  }
+  .zone.draft{ border-style:dashed; }
+
+  .map-tools{
+    display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+    margin-top:10px;
+  }
+  .map-tools .count{ font-size:12.5px; color:var(--ink-soft); flex:1; }
+  .btn{
+    border:none; border-radius:10px; padding:9px 14px;
+    font-size:13px; font-weight:700; font-family:inherit; cursor:pointer;
+  }
+  .btn-ghost{ background:#F3ECE4; color:var(--ink); }
+  .btn-main{ background:var(--accent); color:#fff; }
+  .btn-main:disabled{ background:#D9CFC6; color:#8A7A6E; cursor:default; }
+  .btn-danger{ background:#FBE9EA; color:#A3151F; }
+
+  /* 폼 */
+  .form-card{
+    background:var(--card); border:1px solid var(--line);
+    border-radius:14px; padding:16px; margin-top:12px;
+  }
+  .field{ margin-bottom:14px; }
+  .field:last-child{ margin-bottom:0; }
+  .field label{
+    display:block; font-size:12.5px; font-weight:700;
+    color:var(--ink-soft); margin-bottom:6px;
+  }
+  .field input[type=text], .field textarea, .field select{
+    width:100%; border:1px solid var(--line); border-radius:10px;
+    padding:11px 12px; font-family:inherit; font-size:14.5px;
+    background:#FFFDFB; color:var(--ink);
+  }
+  .field textarea{ resize:vertical; min-height:66px; }
+
+  .co-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+  .co-btn{
+    border:2px solid var(--line); background:#fff;
+    border-radius:10px; padding:10px 8px;
+    font-family:inherit; font-size:13px; font-weight:700;
+    cursor:pointer; color:var(--ink);
+    display:flex; align-items:center; gap:7px;
+  }
+  .co-btn .dot{ width:12px; height:12px; border-radius:3px; flex:0 0 auto; }
+  .co-btn.on{ border-color:var(--ink); background:#FFF7F1; }
+
+  /* 목록 */
+  .work-item{
+    background:var(--card); border:1px solid var(--line);
+    border-radius:14px; padding:14px 16px; margin-bottom:10px;
+    border-left-width:5px; border-left-style:solid;
+  }
+  .work-item .wtop{
+    display:flex; justify-content:space-between;
+    align-items:flex-start; gap:10px;
+  }
+  .work-item .wco{ font-size:11.5px; font-weight:800; }
+  .work-item .wname{ font-size:15.5px; font-weight:800; margin-top:2px; }
+  .work-item .wdetail{
+    font-size:13px; color:var(--ink-soft);
+    margin-top:6px; line-height:1.6; white-space:pre-wrap;
+  }
+  .work-item .wmeta{ font-size:11.5px; color:var(--ink-soft); margin-top:8px; }
+  .work-item .wdel{
+    background:none; border:none; color:#A3151F;
+    font-size:12px; font-weight:700; cursor:pointer;
+    font-family:inherit; padding:4px; flex:0 0 auto;
+  }
+
+  .empty{
+    text-align:center; padding:28px 16px;
+    color:var(--ink-soft); font-size:13.5px;
+    background:var(--card); border:1px dashed var(--line); border-radius:14px;
+  }
+  .legend{ display:flex; flex-wrap:wrap; gap:10px; margin:10px 0 0; }
+  .legend span{ display:flex; align-items:center; gap:5px; font-size:11.5px; color:var(--ink-soft); }
+  .legend i{ width:11px; height:11px; border-radius:3px; display:block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back-btn" href="index.html">← 메인으로</a>
+
+  <h1>DABs 일일안전회의</h1>
+  <p class="page-sub">더현대광주 신축공사 · 업체별 작업구간 표시</p>
+
+  <div class="datebar">
+    <button type="button" onclick="shiftDay(-1)">‹</button>
+    <input type="date" id="theDate" onchange="render()">
+    <button type="button" onclick="goToday()">오늘</button>
+    <button type="button" onclick="shiftDay(1)">›</button>
+  </div>
+
+  <div class="sync-note local" id="syncNote">
+    이 기기에만 저장되는 중입니다. 아래 안내대로 Firebase를 연결하면 모든 사람이 실시간으로 같은 내용을 봅니다.
+  </div>
+
+  <h2>작업구간 현황</h2>
+  <p class="hint">등록된 작업이 배치도에 표시됩니다.</p>
+
+  <div class="map-wrap" id="viewMap">
+    <img src="dabs-map.jpg" alt="현장 배치도">
+  </div>
+  <div class="legend" id="legend"></div>
+
+  <h2>새 작업 등록</h2>
+  <p class="hint">배치도 위를 손가락(또는 마우스)으로 드래그하면 구간이 그려져요. 여러 구간을 계속 추가할 수 있고, 각 구간 오른쪽 위 ×로 지울 수 있어요.</p>
+
+  <div class="map-wrap" id="drawMap">
+    <img src="dabs-map.jpg" alt="작업구간 지정용 배치도">
+  </div>
+  <div class="map-tools">
+    <span class="count" id="zoneCount">구간 미지정</span>
+    <button type="button" class="btn btn-ghost" onclick="clearZones()">구간 초기화</button>
+  </div>
+
+  <div class="form-card">
+    <div class="field">
+      <label>협력업체 *</label>
+      <div class="co-grid" id="coGrid"></div>
+    </div>
+    <div class="field">
+      <label>작업명 *</label>
+      <input type="text" id="fName" placeholder="예: 지하 1층 철근 배근">
+    </div>
+    <div class="field">
+      <label>작업 내용 / 안전 중점사항</label>
+      <textarea id="fDetail" placeholder="예: 고소작업 구간, 안전대 착용 철저"></textarea>
+    </div>
+    <div class="field">
+      <label>작업 인원 (명)</label>
+      <input type="text" id="fCount" inputmode="numeric" placeholder="예: 12">
+    </div>
+    <div class="field">
+      <button type="button" class="btn btn-main" id="submitBtn" onclick="addWork()" style="width:100%; padding:13px;">작업 등록하기</button>
+    </div>
+  </div>
+
+  <h2>등록된 작업 <span id="workCount" style="color:var(--ink-soft); font-weight:600;"></span></h2>
+  <div id="workList"></div>
+
+</div>
+
+<script>
+/* ===================================================================
+   Firebase 연결 (선택)
+   아직 비어 있어서 "이 기기에만 저장" 상태로 동작합니다.
+   Firebase 설정값을 받으면 아래 FIREBASE_CONFIG 안에 붙여넣으세요.
+   =================================================================== */
+const FIREBASE_CONFIG = null;   // 예: { apiKey:"...", databaseURL:"...", ... }
+/* =================================================================== */
+
+const COMPANIES = [
+  { name:"현대건설",    color:"#1D4ED8" },
+  { name:"신영토건",    color:"#C21F2A" },
+  { name:"영신디엔씨",  color:"#0E7490" },
+  { name:"약동산업",    color:"#15803D" },
+  { name:"대주중공업",  color:"#EA580C" },
+  { name:"에스엠파워텍", color:"#7C3AED" }
+];
+
+let selectedCo = COMPANIES[0].name;
+let draftZones = [];
+let store = {};          // { "YYYY-MM-DD": [work, ...] }
+let db = null;           // Firebase ref (연결 시)
+
+/* ---------- 날짜 ---------- */
+function todayStr(){
+  const d = new Date();
+  const off = d.getTimezoneOffset();
+  return new Date(d.getTime() - off*60000).toISOString().slice(0,10);
+}
+function curDate(){ return document.getElementById('theDate').value || todayStr(); }
+function goToday(){ document.getElementById('theDate').value = todayStr(); render(); }
+function shiftDay(n){
+  const d = new Date(curDate() + "T00:00:00");
+  d.setDate(d.getDate() + n);
+  const off = d.getTimezoneOffset();
+  document.getElementById('theDate').value =
+    new Date(d.getTime() - off*60000).toISOString().slice(0,10);
+  render();
+}
+
+/* ---------- 저장소 ---------- */
+function loadLocal(){
+  try { store = JSON.parse(localStorage.getItem('dabs_works') || '{}'); }
+  catch(e){ store = {}; }
+}
+function saveLocal(){
+  try { localStorage.setItem('dabs_works', JSON.stringify(store)); } catch(e){}
+}
+function persist(){
+  if (db) { db.set(store).catch(()=>{}); }
+  else { saveLocal(); }
+}
+
+/* ---------- 업체 버튼 ---------- */
+function buildCoButtons(){
+  const g = document.getElementById('coGrid');
+  g.innerHTML = '';
+  COMPANIES.forEach(c => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'co-btn' + (c.name === selectedCo ? ' on' : '');
+    b.innerHTML = '<span class="dot" style="background:'+c.color+'"></span>' + c.name;
+    b.onclick = () => { selectedCo = c.name; buildCoButtons(); drawDraft(); };
+    g.appendChild(b);
+  });
+}
+function coColor(name){
+  const c = COMPANIES.find(x => x.name === name);
+  return c ? c.color : '#666';
+}
+function buildLegend(){
+  document.getElementById('legend').innerHTML =
+    COMPANIES.map(c => '<span><i style="background:'+c.color+'"></i>'+c.name+'</span>').join('');
+}
+
+/* ---------- 드래그로 구간 그리기 ---------- */
+const drawMap = document.getElementById('drawMap');
+let dragging = false, startX = 0, startY = 0, liveEl = null;
+
+function pctPos(e){
+  const r = drawMap.getBoundingClientRect();
+  return {
+    x: Math.min(100, Math.max(0, (e.clientX - r.left) / r.width * 100)),
+    y: Math.min(100, Math.max(0, (e.clientY - r.top) / r.height * 100))
+  };
+}
+drawMap.addEventListener('pointerdown', e => {
+  if (e.target.classList.contains('zdel')) return;
+  dragging = true;
+  drawMap.setPointerCapture(e.pointerId);
+  const p = pctPos(e);
+  startX = p.x; startY = p.y;
+  liveEl = document.createElement('div');
+  liveEl.className = 'zone draft';
+  liveEl.style.borderColor = coColor(selectedCo);
+  liveEl.style.background = coColor(selectedCo) + '33';
+  drawMap.appendChild(liveEl);
+});
+drawMap.addEventListener('pointermove', e => {
+  if (!dragging || !liveEl) return;
+  const p = pctPos(e);
+  const x = Math.min(startX, p.x), y = Math.min(startY, p.y);
+  const w = Math.abs(p.x - startX), h = Math.abs(p.y - startY);
+  liveEl.style.left = x+'%'; liveEl.style.top = y+'%';
+  liveEl.style.width = w+'%'; liveEl.style.height = h+'%';
+});
+drawMap.addEventListener('pointerup', e => {
+  if (!dragging) return;
+  dragging = false;
+  const p = pctPos(e);
+  const x = Math.min(startX, p.x), y = Math.min(startY, p.y);
+  const w = Math.abs(p.x - startX), h = Math.abs(p.y - startY);
+  if (liveEl){ liveEl.remove(); liveEl = null; }
+  if (w > 1.5 && h > 1.5) draftZones.push({x,y,w,h});
+  drawDraft();
+});
+
+function drawDraft(){
+  drawMap.querySelectorAll('.zone').forEach(el => el.remove());
+  draftZones.forEach((z, i) => {
+    const el = document.createElement('div');
+    el.className = 'zone';
+    el.style.cssText =
+      'left:'+z.x+'%; top:'+z.y+'%; width:'+z.w+'%; height:'+z.h+'%;' +
+      'border-color:'+coColor(selectedCo)+'; background:'+coColor(selectedCo)+'33;';
+    const del = document.createElement('button');
+    del.type = 'button'; del.className = 'zdel'; del.textContent = '×';
+    del.onclick = ev => { ev.stopPropagation(); draftZones.splice(i,1); drawDraft(); };
+    el.appendChild(del);
+    drawMap.appendChild(el);
+  });
+  document.getElementById('zoneCount').textContent =
+    draftZones.length ? draftZones.length + '개 구간 지정됨' : '구간 미지정';
+}
+function clearZones(){ draftZones = []; drawDraft(); }
+
+/* ---------- 등록 / 삭제 ---------- */
+function addWork(){
+  const name = document.getElementById('fName').value.trim();
+  if (!name){ alert('작업명을 입력해 주세요.'); return; }
+  if (!draftZones.length){ alert('배치도에서 작업구간을 드래그해 지정해 주세요.'); return; }
+
+  const d = curDate();
+  if (!store[d]) store[d] = [];
+  store[d].push({
+    id: Date.now() + '-' + Math.random().toString(36).slice(2,7),
+    company: selectedCo,
+    name: name,
+    detail: document.getElementById('fDetail').value.trim(),
+    count: document.getElementById('fCount').value.trim(),
+    zones: draftZones.slice(),
+    at: new Date().toISOString()
+  });
+  persist();
+
+  document.getElementById('fName').value = '';
+  document.getElementById('fDetail').value = '';
+  document.getElementById('fCount').value = '';
+  draftZones = [];
+  drawDraft();
+  render();
+}
+function delWork(id){
+  if (!confirm('이 작업을 삭제할까요?')) return;
+  const d = curDate();
+  store[d] = (store[d] || []).filter(w => w.id !== id);
+  if (!store[d].length) delete store[d];
+  persist();
+  render();
+}
+
+/* ---------- 화면 그리기 ---------- */
+function render(){
+  const d = curDate();
+  const works = store[d] || [];
+
+  const vm = document.getElementById('viewMap');
+  vm.querySelectorAll('.zone').forEach(el => el.remove());
+  works.forEach(w => {
+    (w.zones || []).forEach(z => {
+      const el = document.createElement('div');
+      el.className = 'zone';
+      el.style.cssText =
+        'left:'+z.x+'%; top:'+z.y+'%; width:'+z.w+'%; height:'+z.h+'%;' +
+        'border-color:'+coColor(w.company)+'; background:'+coColor(w.company)+'2E;';
+      const lb = document.createElement('div');
+      lb.className = 'zlabel';
+      lb.style.background = coColor(w.company);
+      lb.textContent = w.name;
+      el.appendChild(lb);
+      vm.appendChild(el);
+    });
+  });
+
+  document.getElementById('workCount').textContent =
+    works.length ? '(' + works.length + '건)' : '';
+
+  const list = document.getElementById('workList');
+  if (!works.length){
+    list.innerHTML = '<div class="empty">이 날짜에 등록된 작업이 없습니다.</div>';
+    return;
+  }
+  list.innerHTML = works.map(w => {
+    const c = coColor(w.company);
+    const meta = [];
+    if (w.count) meta.push('인원 ' + w.count + '명');
+    meta.push('구간 ' + (w.zones||[]).length + '개');
+    return '<div class="work-item" style="border-left-color:'+c+'">' +
+      '<div class="wtop"><div>' +
+        '<div class="wco" style="color:'+c+'">'+esc(w.company)+'</div>' +
+        '<div class="wname">'+esc(w.name)+'</div>' +
+      '</div>' +
+      '<button class="wdel" onclick="delWork(\''+w.id+'\')">삭제</button></div>' +
+      (w.detail ? '<div class="wdetail">'+esc(w.detail)+'</div>' : '') +
+      '<div class="wmeta">'+meta.join(' · ')+'</div>' +
+    '</div>';
+  }).join('');
+}
+function esc(s){
+  return String(s||'').replace(/[&<>"']/g, m =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+/* ---------- Firebase (설정이 있을 때만) ---------- */
+function initFirebase(){
+  if (!FIREBASE_CONFIG) { loadLocal(); render(); return; }
+  const s1 = document.createElement('script');
+  s1.src = 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js';
+  s1.onload = () => {
+    const s2 = document.createElement('script');
+    s2.src = 'https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js';
+    s2.onload = () => {
+      try {
+        firebase.initializeApp(FIREBASE_CONFIG);
+        db = firebase.database().ref('dabs_works');
+        db.on('value', snap => {
+          store = snap.val() || {};
+          render();
+        });
+        const n = document.getElementById('syncNote');
+        n.className = 'sync-note live';
+        n.textContent = '실시간 연동 중입니다. 등록한 내용이 모든 사람에게 바로 공유됩니다.';
+      } catch(e){ loadLocal(); render(); }
+    };
+    s2.onerror = () => { loadLocal(); render(); };
+    document.head.appendChild(s2);
+  };
+  s1.onerror = () => { loadLocal(); render(); };
+  document.head.appendChild(s1);
+}
+
+/* ---------- 시작 ---------- */
+document.getElementById('theDate').value = todayStr();
+buildCoButtons();
+buildLegend();
+drawDraft();
+initFirebase();
+</script>
+</body>
+</html>
